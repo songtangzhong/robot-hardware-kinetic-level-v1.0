@@ -4,8 +4,9 @@
   <version>0.0.0</version>
   <description>The robot_info package</description>
 
-  <maintainer email="stz@todo.todo">stz</maintainer>
-  <license>TODO</license>
+  <maintainer email="songtangzhong@163.com">Song Tangzhong</maintainer>
+  <license>Apache 2.0</license>
+  <author>Song Tangzhong</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 

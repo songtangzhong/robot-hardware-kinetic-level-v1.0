@@ -1,0 +1,39 @@
+robot:
+  arm:
+    state_controller:
+      type: joint_state_controller/JointStateController
+      publish_rate: 1000 # update rate: 1000 Hz
+
+    position_controller:
+      type: position_controllers/JointGroupPositionController
+      joints:
+        - right_j0
+        - right_j1
+        - right_j2
+        - right_j3
+        - right_j4
+        - right_j5
+        - right_j6
+
+    velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
+      joints:
+        - right_j0
+        - right_j1
+        - right_j2
+        - right_j3
+        - right_j4
+        - right_j5
+        - right_j6
+
+    effort_controller:
+      type: effort_controllers/JointGroupEffortController
+      joints:
+        - right_j0
+        - right_j1
+        - right_j2
+        - right_j3
+        - right_j4
+        - right_j5
+        - right_j6
+        

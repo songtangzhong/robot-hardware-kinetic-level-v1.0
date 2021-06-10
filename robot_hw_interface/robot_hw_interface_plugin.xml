@@ -1,0 +1,8 @@
+<library path="lib/librobot_hw_interface">
+  <class name="robot_hw_interface/RobotHwInterface" type="robot_hw_interface::RobotHwInterface" 
+    base_class_type="hardware_interface::RobotHW">
+    <description>
+      robot hardware interface
+    </description>
+  </class>
+</library>

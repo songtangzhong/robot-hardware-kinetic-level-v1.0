@@ -1,0 +1,28 @@
+<launch>
+    <!-- load some useful ros params to ros param server -->
+    <rosparam file="$(find robot_hw_interface)/config/robot_hardware.yaml" command="load" />
+
+    <!-- load robot hardware controllers to ros param server -->
+    <rosparam file="$(find robot_hw_interface)/config/robot_controllers.yaml" command="load" />
+
+    <!-- load urdf to ros param server -->
+    <!--<param name="robot_description" 
+        textfile="$(find robot_hw_interface)/urdf/sawyer.urdf" />-->
+
+    <!-- start robot hardware control node -->
+    <node name="robot_hw_control" pkg="robot_hw_interface" type="robot_hw_control" output="screen" />
+
+    <!-- start some default running controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="controller_manager" 
+        respawn="false" output="screen" ns="/"
+        args="spawn
+              /robot/arm/state_controller
+              /robot/arm/position_controller" />
+    
+    <!-- load some default stopped controllers -->
+    <node name="controller_spawner_stopped" pkg="controller_manager" type="controller_manager" 
+        respawn="false" output="screen" ns="/"
+        args="load
+              /robot/arm/velocity_controller
+              /robot/arm/effort_controller" />
+</launch>

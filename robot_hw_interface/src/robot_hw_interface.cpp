@@ -23,7 +23,8 @@ bool RobotHwInterface::init(const std::string ns)
         return false;
     }
 
-    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    // Following part has been moved to real robot.
+    /*for (unsigned int j=0; j< robot_->arm_->dof_; j++)
     {
         arm_shm_->control_modes_[j] = robot_->arm_->control_modes_[j];
 
@@ -34,7 +35,7 @@ bool RobotHwInterface::init(const std::string ns)
         arm_shm_->cmd_positions_[j] = robot_->arm_->cmd_positions_[j];
         arm_shm_->cmd_velocities_[j] = robot_->arm_->cmd_velocities_[j];
         arm_shm_->cmd_efforts_[j] = robot_->arm_->cmd_efforts_[j];
-    }
+    }*/
     // end arm shared memory
 
     // get joint names and joint nums
@@ -86,31 +87,31 @@ void RobotHwInterface::read(const ros::Time& time, const ros::Duration& period)
 
 void RobotHwInterface::write(const ros::Time& time, const ros::Duration& period)
 {
-    if (arm_shm_->control_modes_[0] && robot_->position_mode_)
+    if (arm_shm_->control_modes_[0] == robot_->position_mode_)
     {
         for (unsigned int i=0; i< robot_->arm_->dof_; i++)
         {
             arm_shm_->cmd_positions_[i] = robot_->arm_->cmd_positions_[i];
-            std::cout << "arm_shm_->cmd_positions_[" << i << "] = "
-                << arm_shm_->cmd_positions_[i] << std::endl;
+            /*std::cout << "robot_->arm_->cmd_positions_[" << i << "] = "
+                << robot_->arm_->cmd_positions_[i] << std::endl;*/
         }
     }
-    else if (arm_shm_->control_modes_[0] && robot_->velocity_mode_)
+    else if (arm_shm_->control_modes_[0] == robot_->velocity_mode_)
     {
         for (unsigned int i=0; i< robot_->arm_->dof_; i++)
         {
             arm_shm_->cmd_velocities_[i] = robot_->arm_->cmd_velocities_[i];
-            std::cout << "arm_shm_->cmd_velocities_[" << i << "] = "
-                << arm_shm_->cmd_velocities_[i] << std::endl;
+            /*std::cout << "robot_->arm_->cmd_velocities_[" << i << "] = "
+                << robot_->arm_->cmd_velocities_[i] << std::endl;*/
         }
     }
-    else if (arm_shm_->control_modes_[0] && robot_->effort_mode_)
+    else if (arm_shm_->control_modes_[0] == robot_->effort_mode_)
     {
         for (unsigned int i=0; i< robot_->arm_->dof_; i++)
         {
             arm_shm_->cmd_efforts_[i] = robot_->arm_->cmd_efforts_[i];
-            std::cout << "arm_shm_->cmd_efforts_[" << i << "] = "
-                << arm_shm_->cmd_efforts_[i] << std::endl;
+            /*std::cout << "robot_->arm_->cmd_efforts_[" << i << "] = "
+                << robot_->arm_->cmd_efforts_[i] << std::endl;*/
         }
     }
 }

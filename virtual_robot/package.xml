@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>virtual_robot</name>
+  <version>0.0.0</version>
+  <description>The virtual_robot package</description>
+
+  <maintainer email="songtangzhong@163.com">Song Tangzhong</maintainer>
+  <license>Apache 2.0</license>
+  <author>Song Tangzhong</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>message_generation</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>robot_info</build_depend>
+  <build_depend>robot_sh_memory</build_depend>
+
+  <build_export_depend>message_generation</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>robot_info</build_export_depend>
+  <build_export_depend>robot_sh_memory</build_export_depend>
+
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>robot_info</exec_depend>
+  <exec_depend>robot_sh_memory</exec_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

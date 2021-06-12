@@ -27,7 +27,7 @@ public:
     void read(const ros::Time& time, const ros::Duration& period);
     void write(const ros::Time& time, const ros::Duration& period);
 
-private:    
+private:
     // joint states interfaces
     hardware_interface::JointStateInterface joint_state_interface_;
 

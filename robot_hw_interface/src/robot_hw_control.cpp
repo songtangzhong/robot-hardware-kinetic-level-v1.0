@@ -12,15 +12,9 @@ int main(int argc, char **argv)
     spinner.start();
 
     ros::NodeHandle nh;
+
     robot_hw_interface::RobotHwInterface hw;
     bool init_success = hw.init(ROBOT_ARM_JOINTS);
-
-    // Read hw.arm_shm_->cur_positions_[j],
-    // and publish them to /ROBOT/ARM/POSITION_CONTROLLER
-    // This will set the values of real robot position to position command buffer area.
-
-    // Publish zeros to /ROBOT/ARM/VELOCITY_CONTROLLER and /ROBOT/ARM/EFFORT_CONTROLLER
-    // This will clear velocity and effort command buffer area.
 
     controller_manager::ControllerManager cm(&hw,nh);
 

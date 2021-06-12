@@ -22,20 +22,6 @@ bool RobotHwInterface::init(const std::string ns)
         ROS_ERROR("Create arm semaphore failed.");
         return false;
     }
-
-    // Following part has been moved to real robot.
-    /*for (unsigned int j=0; j< robot_->arm_->dof_; j++)
-    {
-        arm_shm_->control_modes_[j] = robot_->arm_->control_modes_[j];
-
-        arm_shm_->cur_positions_[j] = robot_->arm_->cur_positions_[j];
-        arm_shm_->cur_velocities_[j] = robot_->arm_->cur_velocities_[j];
-        arm_shm_->cur_efforts_[j] = robot_->arm_->cur_efforts_[j];
-
-        arm_shm_->cmd_positions_[j] = robot_->arm_->cmd_positions_[j];
-        arm_shm_->cmd_velocities_[j] = robot_->arm_->cmd_velocities_[j];
-        arm_shm_->cmd_efforts_[j] = robot_->arm_->cmd_efforts_[j];
-    }*/
     // end arm shared memory
 
     // get joint names and joint nums

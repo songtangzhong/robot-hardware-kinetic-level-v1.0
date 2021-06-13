@@ -45,14 +45,16 @@ int main(int argc, char **argv)
     // Firstly, set the default control mode,
     // read data from real robot, 
     // then write them into current and command shared memory.
+    sem_common::semaphore_p(arm_sem_id);
     for (unsigned int j=0; j< robot->arm_->dof_; j++)
     {
         arm_shm->control_modes_[j] = robot->position_mode_;
 
-        arm_shm->cmd_positions_[j] = arm_shm->cur_positions_[j] = 1; // data is from real robot
-        arm_shm->cmd_velocities_[j] = arm_shm->cur_velocities_[j] = 2; // data is from real robot
-        arm_shm->cmd_efforts_[j] = arm_shm->cur_efforts_[j] = 3; // data is from real robot
+        arm_shm->cmd_positions_[j] = 1; // data is from real robot
+        arm_shm->cmd_velocities_[j] = 0; // zeros
+        arm_shm->cmd_efforts_[j] = 0; // zeros
     }
+    sem_common::semaphore_v(arm_sem_id);
     
     double rate = 1000; // 1000 Hz
     ros::Rate loop_rate(rate);
@@ -61,16 +63,13 @@ int main(int argc, char **argv)
     {
         t += 1/rate;
 
+        sem_common::semaphore_p(arm_sem_id);
         for (unsigned int j=0; j< robot->arm_->dof_; j++)
         {
             // data is from real robot
-            /*arm_shm->cur_positions_[j] = sin(0.1*M_PI*(t+j)); 
-            arm_shm->cur_velocities_[j] = cos(0.1*M_PI*(t+j));
-            arm_shm->cur_efforts_[j] = sin(0.1*M_PI*(t+j))+cos(0.1*M_PI*(t+j));*/
-            
-            arm_shm->cur_positions_[j] = 1; 
-            arm_shm->cur_velocities_[j] = 2;
-            arm_shm->cur_efforts_[j] = 3;
+            arm_shm->cur_positions_[j] = 11; 
+            arm_shm->cur_velocities_[j] = 12;
+            arm_shm->cur_efforts_[j] = 13;
         }
 
         if (arm_shm->control_modes_[0] == robot->position_mode_)
@@ -98,6 +97,7 @@ int main(int argc, char **argv)
                     << arm_shm->cmd_efforts_[j] << std::endl;
             }
         }
+        sem_common::semaphore_v(arm_sem_id);
     }
 
     return 0;

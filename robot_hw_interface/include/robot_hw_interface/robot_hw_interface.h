@@ -23,7 +23,7 @@ public:
     RobotHwInterface();
     ~RobotHwInterface();
 
-    bool init(const std::string ns);
+    bool init(const std::string &ns);
     void read(const ros::Time& time, const ros::Duration& period);
     void write(const ros::Time& time, const ros::Duration& period);
 

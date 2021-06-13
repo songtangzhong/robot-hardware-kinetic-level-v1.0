@@ -2,10 +2,9 @@ robot:
   arm:
     type: robot_hw_interface/RobotHwInterface
     joints:
-      - right_j0
-      - right_j1
-      - right_j2
-      - right_j3
-      - right_j4
-      - right_j5
-      - right_j6
+      - shoulder_pan
+      - shoulder_lift
+      - elbow
+      - wrist_1
+      - wrist_2
+      - wrist_3

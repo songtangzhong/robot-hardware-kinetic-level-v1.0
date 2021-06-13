@@ -6,7 +6,7 @@ RobotHwInterface::RobotHwInterface(){}
 
 RobotHwInterface::~RobotHwInterface(){}
 
-bool RobotHwInterface::init(const std::string ns)
+bool RobotHwInterface::init(const std::string &ns)
 {
     // arm shared memory
     arm_shm_id_ = shm_common::create_shm(robot_->arm_->shm_key_, &arm_shm_);
@@ -23,6 +23,16 @@ bool RobotHwInterface::init(const std::string ns)
         return false;
     }
     // end arm shared memory
+
+    // Set current real robot positions to controller variables.
+    sem_common::semaphore_p(arm_sem_id_);    
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        robot_->arm_->cmd_positions_[j] = arm_shm_->cur_positions_[j];
+        robot_->arm_->cmd_velocities_[j] = 0;
+        robot_->arm_->cmd_efforts_[j] = 0;
+    }
+    sem_common::semaphore_v(arm_sem_id_);
 
     // get joint names and joint nums
     ros::param::get(ns, robot_->arm_->joint_names_);
@@ -63,16 +73,19 @@ bool RobotHwInterface::init(const std::string ns)
 
 void RobotHwInterface::read(const ros::Time& time, const ros::Duration& period)
 {
+    sem_common::semaphore_p(arm_sem_id_);
     for (unsigned int i=0; i< robot_->arm_->dof_; i++)
     {
         robot_->arm_->cur_positions_[i] = arm_shm_->cur_positions_[i];
         robot_->arm_->cur_velocities_[i] = arm_shm_->cur_velocities_[i];
         robot_->arm_->cur_efforts_[i] = arm_shm_->cur_efforts_[i];
     }
+    sem_common::semaphore_v(arm_sem_id_);
 }
 
 void RobotHwInterface::write(const ros::Time& time, const ros::Duration& period)
 {
+    sem_common::semaphore_p(arm_sem_id_);
     if (arm_shm_->control_modes_[0] == robot_->position_mode_)
     {
         for (unsigned int i=0; i< robot_->arm_->dof_; i++)
@@ -100,6 +113,7 @@ void RobotHwInterface::write(const ros::Time& time, const ros::Duration& period)
                 << robot_->arm_->cmd_efforts_[i] << std::endl;*/
         }
     }
+    sem_common::semaphore_v(arm_sem_id_);
 }
 
 }

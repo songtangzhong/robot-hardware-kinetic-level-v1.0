@@ -14,6 +14,8 @@ int main(int argc, char **argv)
     std::shared_ptr<robot_sdk::Robot> robot = 
         std::make_shared<robot_sdk::Robot>();
 
+    robot->wait_for_ready(3);
+
     robot->switch_controller(argv[1]);
 
     ros::shutdown();

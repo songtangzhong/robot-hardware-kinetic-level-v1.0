@@ -18,6 +18,7 @@ public:
     Robot();
     ~Robot();
 
+    void wait_for_ready(int times);
     int switch_controller(const std::string &start_controller);
 
 private:

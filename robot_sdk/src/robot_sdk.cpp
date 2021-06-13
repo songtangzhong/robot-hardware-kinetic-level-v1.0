@@ -26,6 +26,21 @@ Robot::Robot()
 
 Robot::~Robot(){}
 
+void Robot::wait_for_ready(int seconds)
+{
+    int times = seconds;
+    ros::Rate rate(1);
+    while (ros::ok())
+    {
+        ROS_INFO("wait for ready...%d s.", times);
+        rate.sleep();
+        if (times-- == 0)
+        {
+            break;
+        }
+    }
+}
+
 int Robot::switch_controller(const std::string &start_controller)
 {
     if ((start_controller!=ROBOT_ARM_POSITION_CONTROLLER) 

@@ -13,8 +13,9 @@
 
 // robot arm joint names, it must be same as the sdf, "robot_hw_interface/config/robot_hardware.yaml"
 // and "robot_hw_interface/config/robot_controllers.yaml".
+// Used in "gazebo_control_plugin/src/gazebo_control_plugin.cpp"
 const std::string ROBOT_ARM_JOINT_NAMES[ARM_DOF] = 
-    {"shoulder_pan","shoulder_lift","elbow","wrist_1","wrist_2","wrist_3"};
+    {"joint1","joint2","joint3","joint4","joint5","joint6"};
 
 // robot control mode
 #define ROBOT_POSITION_MODE  1<<0
@@ -22,11 +23,18 @@ const std::string ROBOT_ARM_JOINT_NAMES[ARM_DOF] =
 #define ROBOT_EFFORT_MODE    1<<2
 
 // This corresponds to robot hardware interface in "robot_hw_interface/config/robot_hardware.yaml".
+// Used to get ros parameters in "robot_hw_interface/src/robot_hw_control.cpp"
 #define ROBOT_ARM_JOINTS  "/robot/arm/joints"
 
 // This corresponds to robot hardware interface in "robot_hw_interface/config/robot_controllers.yaml".
+// Used to switch controller in "robot_sdk/src/robot_sdk.cpp".
 #define ROBOT_ARM_POSITION_CONTROLLER  "/robot/arm/position_controller"
 #define ROBOT_ARM_VELOCITY_CONTROLLER  "/robot/arm/velocity_controller"
 #define ROBOT_ARM_EFFORT_CONTROLLER    "/robot/arm/effort_controller"
+
+// Used in "robot_sdk/src/robot_sdk.cpp" to publish commands.
+#define ROBOT_ARM_POSITION_CONTROLLER_TOPIC  "/robot/arm/position_controller/command"
+#define ROBOT_ARM_VELOCITY_CONTROLLER_TOPIC  "/robot/arm/velocity_controller/command"
+#define ROBOT_ARM_EFFORT_CONTROLLER_TOPIC    "/robot/arm/effort_controller/command"
 
 #endif

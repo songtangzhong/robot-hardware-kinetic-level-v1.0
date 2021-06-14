@@ -2,9 +2,9 @@ robot:
   arm:
     type: robot_hw_interface/RobotHwInterface
     joints:
-      - shoulder_pan
-      - shoulder_lift
-      - elbow
-      - wrist_1
-      - wrist_2
-      - wrist_3
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6

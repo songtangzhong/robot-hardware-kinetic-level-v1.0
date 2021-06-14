@@ -79,6 +79,24 @@ void RobotHwInterface::read(const ros::Time& time, const ros::Duration& period)
         robot_->arm_->cur_positions_[i] = arm_shm_->cur_positions_[i];
         robot_->arm_->cur_velocities_[i] = arm_shm_->cur_velocities_[i];
         robot_->arm_->cur_efforts_[i] = arm_shm_->cur_efforts_[i];
+
+        // test code
+        /*if (arm_shm_->control_modes_[0] == robot_->position_mode_)
+        {
+            std::cout << "arm_shm_->cur_positions_[" << i << "] = "
+                << arm_shm_->cur_positions_[i] << std::endl;
+        }
+        else if (arm_shm_->control_modes_[0] == robot_->velocity_mode_)
+        {
+            std::cout << "arm_shm_->cur_velocities_[" << i << "] = "
+                << arm_shm_->cur_velocities_[i] << std::endl;
+        }
+        else if (arm_shm_->control_modes_[0] == robot_->effort_mode_)
+        {
+            std::cout << "arm_shm_->cur_efforts_[" << i << "] = "
+                << arm_shm_->cur_efforts_[i] << std::endl;
+        }*/
+        // end test
     }
     sem_common::semaphore_v(arm_sem_id_);
 }

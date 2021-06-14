@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>robot_sdk</name>
+  <name>robot_examples</name>
   <version>0.0.0</version>
-  <description>The robot_sdk package</description>
+  <description>The robot_examples package</description>
 
   <maintainer email="songtangzhong@163.com">Song Tangzhong</maintainer>
   <license>Apache 2.0</license>
@@ -14,28 +14,19 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>robot_info</build_depend>
-  <build_depend>robot_sh_memory</build_depend>
-  <build_depend>controller_manager_msgs</build_depend>
-  <build_depend>sensor_msgs</build_depend>
+  <build_depend>robot_sdk</build_depend>
 
   <build_export_depend>message_generation</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
-  <build_export_depend>robot_info</build_export_depend>
-  <build_export_depend>robot_sh_memory</build_export_depend>
-  <build_export_depend>controller_manager_msgs</build_export_depend>
-  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>robot_sdk</build_export_depend>
 
   <exec_depend>message_runtime</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>robot_info</exec_depend>
-  <exec_depend>robot_sh_memory</exec_depend>
-  <exec_depend>controller_manager_msgs</exec_depend>
-  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>robot_sdk</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

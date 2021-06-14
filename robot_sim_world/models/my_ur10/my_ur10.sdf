@@ -35,7 +35,7 @@
         </geometry>
       </visual>
     </link>
-    <link name='shoulder'>
+    <link name='link1'>
       <pose>0 0 .1273 0 -0 0</pose>
       <inertial>
         <mass>7.778</mass>
@@ -65,7 +65,7 @@
       </visual>
     </link>
 
-    <link name='upper_arm'>
+    <link name='link2'>
       <pose>0 0.220941 0.1273 3.14159 1.57079 3.14159</pose>
       <inertial>
         <pose>0 0 0.306 0 0 0</pose>
@@ -119,7 +119,7 @@
       </visual>
     </link>
 
-    <link name='forearm'>
+    <link name='link3'>
       <pose>0.612 0.049041 0.1273 3.14159 1.57079 3.14159</pose>
       <inertial>
         <pose>0 0 0.28615 0 -0 0</pose>
@@ -172,7 +172,7 @@
       </visual>
     </link>
 
-    <link name='wrist_1'>
+    <link name='link4'>
       <pose>1.1843 0.049041 0.1273 3.14159 3.58979e-09 3.14159</pose>
       <inertial>
         <mass>1.96</mass>
@@ -203,7 +203,7 @@
       </visual>
     </link>
 
-    <link name='wrist_2'>
+    <link name='link5'>
       <pose>1.1843 0.163941 0.1273 3.14159 3.58979e-09 3.14159</pose>
       <inertial>
         <mass>1.96</mass>
@@ -234,7 +234,7 @@
       </visual>
     </link>
 
-    <link name='wrist_3'>
+    <link name='link6'>
       <pose>1.1843 0.163941 0.0116 3.14159 3.58979e-09 3.14159</pose>
       <inertial>
         <mass>0.202</mass>
@@ -265,8 +265,8 @@
       </visual>
     </link>
 
-    <joint name='shoulder_pan' type='revolute'>
-      <child>shoulder</child>
+    <joint name='joint1' type='revolute'>
+      <child>link1</child>
       <parent>base</parent>
       <axis>
         <xyz>0 0 1</xyz>
@@ -280,9 +280,9 @@
       </axis>
     </joint>
 
-    <joint name='shoulder_lift' type='revolute'>
-      <child>upper_arm</child>
-      <parent>shoulder</parent>
+    <joint name='joint2' type='revolute'>
+      <child>link2</child>
+      <parent>link1</parent>
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
@@ -295,9 +295,9 @@
       </axis>
     </joint>
 
-    <joint name='elbow' type='revolute'>
-      <child>forearm</child>
-      <parent>upper_arm</parent>
+    <joint name='joint3' type='revolute'>
+      <child>link3</child>
+      <parent>link2</parent>
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
@@ -310,9 +310,9 @@
       </axis>
     </joint>
 
-    <joint name='wrist_1' type='revolute'>
-      <child>wrist_1</child>
-      <parent>forearm</parent>
+    <joint name='joint4' type='revolute'>
+      <child>link4</child>
+      <parent>link3</parent>
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
@@ -325,9 +325,9 @@
       </axis>
     </joint>
 
-    <joint name='wrist_2' type='revolute'>
-      <child>wrist_2</child>
-      <parent>wrist_1</parent>
+    <joint name='joint5' type='revolute'>
+      <child>link5</child>
+      <parent>link4</parent>
       <axis>
         <xyz>3.58979e-09 0 -1</xyz>
         <limit>
@@ -340,9 +340,9 @@
       </axis>
     </joint>
 
-    <joint name='wrist_3' type='revolute'>
-      <child>wrist_3</child>
-      <parent>wrist_2</parent>
+    <joint name='joint6' type='revolute'>
+      <child>link6</child>
+      <parent>link5</parent>
       <axis>
         <xyz>0 1 0</xyz>
         <limit>

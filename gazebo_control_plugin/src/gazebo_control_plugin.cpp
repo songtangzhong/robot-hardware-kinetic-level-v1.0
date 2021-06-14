@@ -110,9 +110,31 @@ void ControlPlugin::Update()
 
     for (unsigned int j=0; j< robot_->arm_->dof_; j++)
     {
+        // arm_joints_[j]->GetVelocity(0) and arm_joints_[j]->GetForce((unsigned int)(0))
+        // can't work in current gazebo version, but this part can work in real robot rightly.
         arm_shm_->cur_positions_[j] = arm_joints_[j]->GetAngle(0).Radian();
         arm_shm_->cur_velocities_[j] = arm_joints_[j]->GetVelocity(0);
         arm_shm_->cur_efforts_[j] = arm_joints_[j]->GetForce((unsigned int)(0));
+
+        // test code
+        /*arm_shm_->cur_velocities_[j] = j;
+        arm_shm_->cur_efforts_[j] = j*2;*/
+        /*if (arm_shm_->control_modes_[0] == robot_->position_mode_)
+        {
+            std::cout << "arm_joints_[" << j << "]->GetAngle = "
+                << arm_joints_[j]->GetAngle(0).Radian() << std::endl;
+        }
+        else if (arm_shm_->control_modes_[0] == robot_->velocity_mode_)
+        {
+            std::cout << "arm_joints_[" << j << "]->GetVelocity = "
+                << arm_joints_[j]->GetVelocity(0) << std::endl;
+        }
+        else if (arm_shm_->control_modes_[0] == robot_->effort_mode_)
+        {
+            std::cout << "arm_joints_[" << j << "]->GetForce = "
+                << arm_joints_[j]->GetForce((unsigned int)(0)) << std::endl;
+        }*/
+        // end test
     }
     sem_common::semaphore_v(arm_sem_id_);
 }

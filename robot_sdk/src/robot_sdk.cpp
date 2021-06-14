@@ -8,6 +8,12 @@ Robot::Robot()
 {
     switch_controller_cli_ = nh_.serviceClient<controller_manager_msgs::SwitchController>(
         "/controller_manager/switch_controller");
+    arm_joint_states_sub_ = nh_.subscribe("/joint_states", 100, &Robot::arm_joint_states_cb_, this);
+
+    joint_position_cmds_pub_ = nh_.advertise<std_msgs::Float64MultiArray>(
+            ROBOT_ARM_POSITION_CONTROLLER_TOPIC, 10);
+
+    dof_ = robot_->arm_->dof_;
 
     // arm shared memory
     arm_shm_id_ = shm_common::create_shm(robot_->arm_->shm_key_, &arm_shm_);
@@ -22,6 +28,10 @@ Robot::Robot()
         ROS_ERROR("Create arm semaphore failed.");
     }
     // end arm shared memory
+
+    cur_positions_.resize(robot_->arm_->dof_);
+    cur_velocities_.resize(robot_->arm_->dof_);
+    cur_efforts_.resize(robot_->arm_->dof_);
 }
 
 Robot::~Robot(){}
@@ -114,6 +124,91 @@ int Robot::switch_controller(const std::string &start_controller)
         }
     }
     sem_common::semaphore_v(arm_sem_id_);
+
+    return 1;
+}
+
+void Robot::arm_joint_states_cb_(const sensor_msgs::JointState::ConstPtr &msg)
+{
+    std::lock_guard<std::mutex> guard(mtx_);
+
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        cur_positions_[j] = msg->position[j];
+        cur_velocities_[j] = msg->velocity[j];
+        cur_efforts_[j] = msg->effort[j];
+    }
+}
+
+int Robot::get_joint_positions(std::vector<double> &positions)
+{
+    if (positions.size()!=robot_->arm_->dof_)
+    {
+        ROS_ERROR("positions size is not matched.");
+        return -1;
+    }
+
+    std::lock_guard<std::mutex> guard(mtx_);
+
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        positions[j] = cur_positions_[j];
+    }
+
+    return 1;
+}
+
+int Robot::get_joint_velocities(std::vector<double> &velocities)
+{
+    if (velocities.size()!=robot_->arm_->dof_)
+    {
+        ROS_ERROR("velocities size is not matched.");
+        return -1;
+    }
+
+    std::lock_guard<std::mutex> guard(mtx_);
+
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        velocities[j] = cur_velocities_[j];
+    }
+
+    return 1;
+}
+
+int Robot::get_joint_efforts(std::vector<double> &efforts)
+{
+    if (efforts.size()!=robot_->arm_->dof_)
+    {
+        ROS_ERROR("efforts size is not matched.");
+        return -1;
+    }
+
+    std::lock_guard<std::mutex> guard(mtx_);
+
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        efforts[j] = cur_efforts_[j];
+    }
+
+    return 1;
+}
+
+int Robot::set_joint_positions(std::vector<double> positions)
+{
+    if (positions.size()!=robot_->arm_->dof_)
+    {
+        ROS_ERROR("command positions size is not matched.");
+        return -1;
+    }
+
+    std_msgs::Float64MultiArray cmd;
+    cmd.data.resize(robot_->arm_->dof_);
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        cmd.data[j] = positions[j];
+    }
+    joint_position_cmds_pub_.publish(cmd);
 
     return 1;
 }

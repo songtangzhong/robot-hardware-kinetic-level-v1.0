@@ -2,6 +2,7 @@
 #include <robot_info/robot_macro.h>
 #include <vector>
 #include <cmath>
+#include <traj_plan/traj_plan.h>
 
 namespace robot_sdk
 {
@@ -253,6 +254,75 @@ int Robot::set_joint_efforts(std::vector<double> efforts)
         cmd.data[j] = efforts[j];
     }
     joint_effort_cmds_pub_.publish(cmd);
+
+    return 1;
+}
+
+int Robot::move_to_target_joint_positions(std::vector<double> target, const double t)
+{
+    if (target.size()!=robot_->arm_->dof_)
+    {
+        ROS_ERROR("target joint positions size is not matched.");
+        return -1;
+    }
+
+    std::vector<double> cur_positions;
+    std::vector<double> cur_velocities;
+    std::vector<double> cur_accelerations;
+    std::vector<double> target_positions;
+    std::vector<double> target_velocities;
+    std::vector<double> target_accelerations;
+    cur_positions.resize(robot_->arm_->dof_, 0);
+    cur_velocities.resize(robot_->arm_->dof_, 0);
+    cur_accelerations.resize(robot_->arm_->dof_, 0);
+    target_positions.resize(robot_->arm_->dof_, 0);
+    target_velocities.resize(robot_->arm_->dof_, 0);
+    target_accelerations.resize(robot_->arm_->dof_, 0);
+
+    while (ros::ok())
+    {
+        ros::spinOnce();
+        Robot::get_joint_positions(cur_positions);
+        break;
+    }
+
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        target_positions[j] = target[j];
+    }
+
+    std::shared_ptr<traj_plan::MultiJointPlanner> planner =
+        std::make_shared<traj_plan::MultiJointPlanner>();
+    planner->init(cur_positions, cur_velocities, cur_accelerations,
+        target_positions, target_velocities, target_accelerations,
+        t, 0.001);
+
+    std::vector<std::vector<double>> p;
+    std::vector<std::vector<double>> v;
+    std::vector<std::vector<double>> a;
+    p.resize(planner->length_);
+    v.resize(planner->length_);
+    a.resize(planner->length_);
+    for (unsigned int j=0; j< planner->length_; j++)
+    {
+        p[j].resize(robot_->arm_->dof_);
+        v[j].resize(robot_->arm_->dof_);
+        a[j].resize(robot_->arm_->dof_);
+    }
+    planner->pre_plan(p, v, a);
+
+    ros::Rate loop_rate(1000);
+
+    while (ros::ok())
+    {
+        for (unsigned int j=0; j< planner->length_; j++)
+        {
+            Robot::set_joint_positions(p[j]);
+            loop_rate.sleep();
+        }
+
+        break;
+    }
 
     return 1;
 }

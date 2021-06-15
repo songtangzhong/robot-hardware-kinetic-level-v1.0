@@ -18,6 +18,7 @@
   <build_depend>robot_sh_memory</build_depend>
   <build_depend>controller_manager_msgs</build_depend>
   <build_depend>sensor_msgs</build_depend>
+  <build_depend>traj_plan</build_depend>
 
   <build_export_depend>message_generation</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
@@ -27,6 +28,7 @@
   <build_export_depend>robot_sh_memory</build_export_depend>
   <build_export_depend>controller_manager_msgs</build_export_depend>
   <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>traj_plan</build_export_depend>
 
   <exec_depend>message_runtime</exec_depend>
   <exec_depend>roscpp</exec_depend>
@@ -36,6 +38,7 @@
   <exec_depend>robot_sh_memory</exec_depend>
   <exec_depend>controller_manager_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>traj_plan</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     p.resize(planner->length_);
     v.resize(planner->length_);
     a.resize(planner->length_);
-    for (unsigned int j=0; j<planner->length_; j++)
+    for (unsigned int j=0; j< planner->length_; j++)
     {
         p[j].resize(robot->dof_);
         v[j].resize(robot->dof_);

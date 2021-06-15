@@ -37,6 +37,8 @@ public:
     int set_joint_velocities(std::vector<double> velocities);
     int set_joint_efforts(std::vector<double> efforts);
 
+    int move_to_target_joint_positions(std::vector<double> target_positions, const double t);
+
 private:
     void arm_joint_states_cb_(const sensor_msgs::JointState::ConstPtr &msg);
 

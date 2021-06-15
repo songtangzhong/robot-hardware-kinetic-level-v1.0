@@ -9,7 +9,8 @@ Robot::Robot()
 {
     switch_controller_cli_ = nh_.serviceClient<controller_manager_msgs::SwitchController>(
         CONTROLLER_MANAGER_SWITCH_CONTROLLER);
-    arm_joint_states_sub_ = nh_.subscribe(ROBOT_ARM_JOINT_STATES, 100, &Robot::arm_joint_states_cb_, this);
+    arm_joint_states_sub_ = nh_.subscribe(
+        ROBOT_ARM_JOINT_STATES, 100, &Robot::arm_joint_states_cb_, this);
 
     joint_position_cmds_pub_ = nh_.advertise<std_msgs::Float64MultiArray>(
             ROBOT_ARM_POSITION_CONTROLLER_TOPIC, 10);

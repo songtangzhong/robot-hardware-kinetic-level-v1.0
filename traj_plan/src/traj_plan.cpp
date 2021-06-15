@@ -7,9 +7,10 @@ SingleJointPlanner::SingleJointPlanner(){}
 
 SingleJointPlanner::~SingleJointPlanner(){}
 
-void SingleJointPlanner::init(const double start_p, const double start_v, const double start_a,
-        const double target_p, const double target_v, const double target_a,
-        const double tf, const double step)
+void SingleJointPlanner::init(
+    const double start_p, const double start_v, const double start_a,
+    const double target_p, const double target_v, const double target_a,
+    const double tf, const double step)
 {
     theta0_ = start_p;
     theta0Dot_ = start_v;
@@ -21,7 +22,7 @@ void SingleJointPlanner::init(const double start_p, const double start_v, const 
 
     tf_ = tf;
     step_ = step;
-    length_ = (unsigned int)tf_/step_;
+    length_ = (long int)tf_/step_+1;
 
     a0_ = theta0_;
     a1_ = theta0Dot_;
@@ -33,7 +34,7 @@ void SingleJointPlanner::init(const double start_p, const double start_v, const 
 
 void SingleJointPlanner::rt_plan(const double t, double &p, double &v, double &a)
 {
-    if (t<tf_)
+    if (t<=tf_)
     {
         p = a0_+a1_*t+a2_*pow(t,2)+a3_*pow(t,3)+a4_*pow(t,4)+a5_*pow(t,5);
         v = a1_+2*a2_*t+3*a3_*pow(t,2)+4*a4_*pow(t,3)+5*a5_*pow(t,4);
@@ -47,7 +48,8 @@ void SingleJointPlanner::rt_plan(const double t, double &p, double &v, double &a
     }
 }
 
-void SingleJointPlanner::pre_plan(std::vector<double> &p, std::vector<double> &v, std::vector<double> &a)
+void SingleJointPlanner::pre_plan(std::vector<double> &p, 
+    std::vector<double> &v, std::vector<double> &a)
 {
     double t = -step_;
 

@@ -11,12 +11,13 @@ namespace traj_plan
 class SingleJointPlanner
 {
 public:
-    double length_;
+    long int length_;
 
     SingleJointPlanner();
     ~SingleJointPlanner();
 
-    void init(const double start_p, const double start_v, const double start_a,
+    void init(
+        const double start_p, const double start_v, const double start_a,
         const double target_p, const double target_v, const double target_a,
         const double tf, const double step);
 
@@ -47,12 +48,13 @@ private:
 class MultiJointPlanner
 {
 public:
-    double length_;
+    long int length_;
 
     MultiJointPlanner();
     ~MultiJointPlanner();
 
-    void init(std::vector<double> start_p, std::vector<double> start_v, std::vector<double> start_a,
+    void init(
+        std::vector<double> start_p, std::vector<double> start_v, std::vector<double> start_a,
         std::vector<double> target_p, std::vector<double> target_v, std::vector<double> target_a,
         const double tf, const double step);
 

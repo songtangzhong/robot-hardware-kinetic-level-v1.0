@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
     // Firstly, set the default control mode,
     // read data from real robot, 
-    // then write them into current and command shared memory.
+    // then write them into command shared memory.
     sem_common::semaphore_p(arm_sem_id);
     for (unsigned int j=0; j< robot->arm_->dof_; j++)
     {
@@ -64,14 +64,6 @@ int main(int argc, char **argv)
         t += 1/rate;
 
         sem_common::semaphore_p(arm_sem_id);
-        for (unsigned int j=0; j< robot->arm_->dof_; j++)
-        {
-            // data is from real robot
-            arm_shm->cur_positions_[j] = 11; 
-            arm_shm->cur_velocities_[j] = 12;
-            arm_shm->cur_efforts_[j] = 13;
-        }
-
         if (arm_shm->control_modes_[0] == robot->position_mode_)
         {
             for (unsigned int j=0; j< robot->arm_->dof_; j++)
@@ -96,6 +88,14 @@ int main(int argc, char **argv)
                 std::cout << "cmd_effort[" << j << "] = " 
                     << arm_shm->cmd_efforts_[j] << std::endl;
             }
+        }
+
+        for (unsigned int j=0; j< robot->arm_->dof_; j++)
+        {
+            // data is from real robot
+            arm_shm->cur_positions_[j] = 11; 
+            arm_shm->cur_velocities_[j] = 12;
+            arm_shm->cur_efforts_[j] = 13;
         }
         sem_common::semaphore_v(arm_sem_id);
     }

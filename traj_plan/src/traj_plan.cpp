@@ -70,7 +70,8 @@ MultiJointPlanner::MultiJointPlanner(){}
 
 MultiJointPlanner::~MultiJointPlanner(){}
 
-void MultiJointPlanner::init(std::vector<double> start_p, std::vector<double> start_v, std::vector<double> start_a,
+void MultiJointPlanner::init(
+    std::vector<double> start_p, std::vector<double> start_v, std::vector<double> start_a,
     std::vector<double> target_p, std::vector<double> target_v, std::vector<double> target_a,
     const double tf, const double step)
 {
@@ -82,9 +83,11 @@ void MultiJointPlanner::init(std::vector<double> start_p, std::vector<double> st
     }
 
     length_ = sjp[0].length_;
+    step_ = step;
 }
 
-void MultiJointPlanner::rt_plan(const double t, std::vector<double> &p, std::vector<double> &v, std::vector<double> &a)
+void MultiJointPlanner::rt_plan(const double t, 
+    std::vector<double> &p, std::vector<double> &v, std::vector<double> &a)
 {
     for (unsigned int j=0; j<ARM_DOF; j++)
     {
@@ -96,6 +99,33 @@ void MultiJointPlanner::rt_plan(const double t, std::vector<double> &p, std::vec
         p[j] = p_;
         v[j] = v_;
         a[j] = a_;
+    }
+}
+
+void MultiJointPlanner::pre_plan(std::vector<std::vector<double>> &p, 
+    std::vector<std::vector<double>> &v, std::vector<std::vector<double>> &a)
+{
+    double t = -step_;
+
+    std::vector<double> p_;
+    std::vector<double> v_;
+    std::vector<double> a_;
+    p_.resize(ARM_DOF);
+    v_.resize(ARM_DOF);
+    a_.resize(ARM_DOF);
+
+    for (unsigned int j=0; j<length_; j++)
+    {
+        t += step_;
+
+        MultiJointPlanner::rt_plan(t, p_, v_, a_);
+
+        for (unsigned int i=0; i<ARM_DOF; i++)
+        {
+            p[j][i] = p_[i];
+            v[j][i] = v_[i];
+            a[j][i] = a_[i];
+        }
     }
 }
 

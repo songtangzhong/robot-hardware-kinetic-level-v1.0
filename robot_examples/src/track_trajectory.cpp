@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     std::vector<double> target_positions;
     std::vector<double> target_velocities;
     std::vector<double> target_accelerations;
-    cur_positions.resize(robot->dof_);
+    cur_positions.resize(robot->dof_, 0);
     cur_velocities.resize(robot->dof_, 0);
     cur_accelerations.resize(robot->dof_, 0);
     target_positions.resize(robot->dof_, 0);
@@ -35,9 +35,8 @@ int main(int argc, char **argv)
     }
     for (unsigned int j=0; j< robot->dof_; j++)
     {
-        // target_positions[j] = cur_positions[j]+0.5;
+        target_positions[j] = cur_positions[j]-0.5;
     }
-    // target_positions[2] += (-1.57);
 
     std::shared_ptr<traj_plan::MultiJointPlanner> planner =
         std::make_shared<traj_plan::MultiJointPlanner>();
@@ -45,29 +44,34 @@ int main(int argc, char **argv)
         target_positions, target_velocities, target_accelerations,
         5, 0.001);
     std::cout << "planning points length: " << planner->length_ << std::endl;
+
+    std::vector<std::vector<double>> p;
+    std::vector<std::vector<double>> v;
+    std::vector<std::vector<double>> a;
+    p.resize(planner->length_);
+    v.resize(planner->length_);
+    a.resize(planner->length_);
+    for (unsigned int j=0; j<planner->length_; j++)
+    {
+        p[j].resize(robot->dof_);
+        v[j].resize(robot->dof_);
+        a[j].resize(robot->dof_);
+    }
+    planner->pre_plan(p, v, a);
     
     double rate = 1000;
     double t = -1.0/rate;
     ros::Rate loop_rate(rate);
 
-    std::vector<double> p;
-    std::vector<double> v;
-    std::vector<double> a;
-    p.resize(robot->dof_);
-    v.resize(robot->dof_);
-    a.resize(robot->dof_);
-
     while (ros::ok())
     {
-        t += 1.0/rate;
-
-        planner->rt_plan(t, p, v, a);
-        for (unsigned int j=0; j< robot->dof_; j++)
+        for (unsigned int j=0; j< planner->length_; j++)
         {
-            std::cout << "p[" << j << "] = " << p[j] << std::endl;
+            robot->set_joint_positions(p[j]);
+            loop_rate.sleep();
         }
-        robot->set_joint_positions(p);
-        loop_rate.sleep();
+        
+        break;
     }
 
     ros::shutdown();

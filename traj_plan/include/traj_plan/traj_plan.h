@@ -56,10 +56,15 @@ public:
         std::vector<double> target_p, std::vector<double> target_v, std::vector<double> target_a,
         const double tf, const double step);
 
-    void rt_plan(const double t, std::vector<double> &p, std::vector<double> &v, std::vector<double> &a);
+    void rt_plan(const double t, 
+        std::vector<double> &p, std::vector<double> &v, std::vector<double> &a);
+    void pre_plan(std::vector<std::vector<double>> &p, 
+        std::vector<std::vector<double>> &v, std::vector<std::vector<double>> &a);
 
 private:
     SingleJointPlanner sjp[ARM_DOF];
+
+    double step_;
 
 };
 

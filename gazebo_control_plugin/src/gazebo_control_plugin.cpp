@@ -53,10 +53,9 @@ void ControlPlugin::Load(gazebo::physics::ModelPtr parent, sdf::ElementPtr sdf)
     update_connection_ = gazebo::event::Events::ConnectWorldUpdateBegin(
         boost::bind(&ControlPlugin::Update, this));
 
-    /* Set initial positions of gazebo model.
-       This is used to simulate the real positions of real robot
-       when system on power first time.
-    */
+    // Set initial positions of gazebo model.
+    // This is used to simulate the real positions of real robot
+    // when system on power first time.
     std::vector<double> initial_positions;
     initial_positions.resize(robot_->arm_->dof_);
     initial_positions[0] = 0;

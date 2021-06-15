@@ -5,10 +5,6 @@
     <!-- load robot hardware controllers to ros param server -->
     <rosparam file="$(find robot_hw_interface)/config/robot_controllers.yaml" command="load" />
 
-    <!-- load urdf to ros param server -->
-    <!--<param name="robot_description" 
-        textfile="$(find robot_hw_interface)/urdf/sawyer.urdf" />-->
-
     <!-- start robot hardware control node -->
     <node name="robot_hw_control" pkg="robot_hw_interface" type="robot_hw_control" output="screen" />
 

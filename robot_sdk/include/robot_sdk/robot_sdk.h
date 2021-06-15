@@ -34,6 +34,8 @@ public:
     int get_joint_efforts(std::vector<double> &efforts);
 
     int set_joint_positions(std::vector<double> positions);
+    int set_joint_velocities(std::vector<double> velocities);
+    int set_joint_efforts(std::vector<double> efforts);
 
 private:
     void arm_joint_states_cb_(const sensor_msgs::JointState::ConstPtr &msg);
@@ -45,6 +47,8 @@ private:
     ros::Subscriber arm_joint_states_sub_;
 
     ros::Publisher joint_position_cmds_pub_;
+    ros::Publisher joint_velocity_cmds_pub_;
+    ros::Publisher joint_effort_cmds_pub_;
 
     // store robot information
     std::shared_ptr<robot_info::Robot> robot_ = 

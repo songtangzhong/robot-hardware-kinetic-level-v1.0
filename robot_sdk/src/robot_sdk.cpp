@@ -1,6 +1,7 @@
 #include <robot_sdk/robot_sdk.h>
 #include <robot_info/robot_macro.h>
 #include <vector>
+#include <cmath>
 
 namespace robot_sdk
 {
@@ -12,6 +13,10 @@ Robot::Robot()
 
     joint_position_cmds_pub_ = nh_.advertise<std_msgs::Float64MultiArray>(
             ROBOT_ARM_POSITION_CONTROLLER_TOPIC, 10);
+    joint_velocity_cmds_pub_ = nh_.advertise<std_msgs::Float64MultiArray>(
+            ROBOT_ARM_VELOCITY_CONTROLLER_TOPIC, 10);
+    joint_effort_cmds_pub_ = nh_.advertise<std_msgs::Float64MultiArray>(
+            ROBOT_ARM_EFFORT_CONTROLLER_TOPIC, 10);
 
     dof_ = robot_->arm_->dof_;
 
@@ -209,6 +214,44 @@ int Robot::set_joint_positions(std::vector<double> positions)
         cmd.data[j] = positions[j];
     }
     joint_position_cmds_pub_.publish(cmd);
+
+    return 1;
+}
+
+int Robot::set_joint_velocities(std::vector<double> velocities)
+{
+    if (velocities.size()!=robot_->arm_->dof_)
+    {
+        ROS_ERROR("command velocities size is not matched.");
+        return -1;
+    }
+
+    std_msgs::Float64MultiArray cmd;
+    cmd.data.resize(robot_->arm_->dof_);
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        cmd.data[j] = velocities[j];
+    }
+    joint_velocity_cmds_pub_.publish(cmd);
+
+    return 1;
+}
+
+int Robot::set_joint_efforts(std::vector<double> efforts)
+{
+    if (efforts.size()!=robot_->arm_->dof_)
+    {
+        ROS_ERROR("command efforts size is not matched.");
+        return -1;
+    }
+
+    std_msgs::Float64MultiArray cmd;
+    cmd.data.resize(robot_->arm_->dof_);
+    for (unsigned int j=0; j< robot_->arm_->dof_; j++)
+    {
+        cmd.data[j] = efforts[j];
+    }
+    joint_effort_cmds_pub_.publish(cmd);
 
     return 1;
 }

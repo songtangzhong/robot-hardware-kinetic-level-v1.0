@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "get_joint_states");
+    ros::init(argc, argv, "read_joint_states");
     ros::NodeHandle nh;
 
     std::shared_ptr<robot_sdk::Robot> robot =

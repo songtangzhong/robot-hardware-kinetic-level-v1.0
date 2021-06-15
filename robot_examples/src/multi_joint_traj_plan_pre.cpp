@@ -7,7 +7,7 @@
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "track_trajectory");
+    ros::init(argc, argv, "multi_joint_traj_plan_pre");
     ros::NodeHandle nh;
 
     std::shared_ptr<robot_sdk::Robot> robot =
@@ -33,16 +33,14 @@ int main(int argc, char **argv)
         robot->get_joint_positions(cur_positions);
         break;
     }
-    for (unsigned int j=0; j< robot->dof_; j++)
-    {
-        target_positions[j] = cur_positions[j]-0.5;
-    }
 
     std::shared_ptr<traj_plan::MultiJointPlanner> planner =
         std::make_shared<traj_plan::MultiJointPlanner>();
+    double tf = 5;
+    double step = 0.001;
     planner->init(cur_positions, cur_velocities, cur_accelerations,
         target_positions, target_velocities, target_accelerations,
-        5, 0.001);
+        tf, step);
     std::cout << "planning points length: " << planner->length_ << std::endl;
 
     std::vector<std::vector<double>> p;
@@ -60,11 +58,26 @@ int main(int argc, char **argv)
     planner->pre_plan(p, v, a);
     
     double rate = 1000;
-    double t = -1.0/rate;
     ros::Rate loop_rate(rate);
 
     while (ros::ok())
     {
+        for (unsigned int j=0; j< planner->length_; j++)
+        {
+            robot->set_joint_positions(p[j]);
+            loop_rate.sleep();
+        }
+
+        for (unsigned int j=0; j< robot->dof_; j++)
+        {
+            cur_positions[j] = target_positions[j];
+            target_positions[j] = -0.5;
+        }
+        planner->init(cur_positions, cur_velocities, cur_accelerations,
+        target_positions, target_velocities, target_accelerations,
+        tf, step);
+        planner->pre_plan(p, v, a);
+
         for (unsigned int j=0; j< planner->length_; j++)
         {
             robot->set_joint_positions(p[j]);
